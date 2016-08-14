@@ -3,9 +3,12 @@
 
 #include <iostream>
 #include <cstdlib>
+#include <cassert>
 #include <vector>
 #include <map>
 using namespace std;
+
+// object system
 
 struct Sym {
 	string val;
@@ -14,6 +17,8 @@ struct Sym {
 	virtual string dump(int=0); virtual string head(); string pad(int);
 };
 
+// parser
+
 extern int yylex();
 extern int yylineno;
 extern char* yytext;
@@ -21,5 +26,22 @@ extern char* yytext;
 extern int yyparse();
 extern void yyerror(string);
 #include "ypp.tab.hpp"
+
+// virtual machine
+
+#define Msz 0x100
+#define Rsz 0x07
+#define Fsz 0x07
+
+extern int M[Msz];		// memory
+extern int Ip;			// instruction pointer
+extern int Sp;			// stack pointer
+
+extern int R[Rsz];		// registers
+
+extern float F[Fsz];	// FPU stack
+extern int Fp;
+
+extern void dump();
 
 #endif // _H_HPP
