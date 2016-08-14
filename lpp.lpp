@@ -34,4 +34,6 @@ N [0-9]+
 
 [ \t\r\n]+				{}				/* drop spaces			*/
 
+.						{yyerror("undefined lexer token");}
+
 %%
