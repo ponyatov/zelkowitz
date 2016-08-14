@@ -1,0 +1,26 @@
+%{
+#include "hpp.hpp"
+%}
+%defines %union { Sym*o; }
+%token <o> SYM
+%token <o> ADD SUB MUL DIV POW EQ DOT AND TILD
+%type <o> ex
+%left EQ DOT
+%left ADD SUB
+%left MUL DIV
+%left POW
+%left PFX
+%%
+REPL : | REPL ex { cout << $2->dump() << endl; } ;
+ex : SYM
+	| ADD ex %prec PFX	{ $$=$1; $$->push($2); }				/* prefix */
+	| SUB ex %prec PFX	{ $$=$1; $$->push($2); }
+	| ex ADD ex			{ $$=$2; $$->push($1); $$->push($3); }	/* infix */
+	| ex SUB ex			{ $$=$2; $$->push($1); $$->push($3); }
+	| ex MUL ex			{ $$=$2; $$->push($1); $$->push($3); }
+	| ex DIV ex			{ $$=$2; $$->push($1); $$->push($3); }
+	| ex POW ex			{ $$=$2; $$->push($1); $$->push($3); }
+	| ex EQ ex			{ $$=$2; $$->push($1); $$->push($3); }
+	| ex DOT ex			{ $$=$2; $$->push($1); $$->push($3); }
+;
+%%

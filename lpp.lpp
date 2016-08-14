@@ -1,0 +1,37 @@
+%{
+#include "hpp.hpp"
+%}
+%option noyywrap yylineno
+S [\+\-]?
+N [0-9]+
+%%
+#[^\n]*					{}				/* comment				*/
+
+										/* numbers:				*/
+
+0x[0-9A-F]+				TOC(Sym,SYM)	/* hexadecimal prefix	*/
+0b[01]+					TOC(Sym,SYM)	/* binary prefix		*/
+[0-9A-F]+[Hh]			TOC(Sym,SYM)	/* hexadecimal suffix	*/
+[01]+[Bb]				TOC(Sym,SYM)	/* binary suffix		*/
+
+{N}(\.{N})?[eE]{S}{N}	TOC(Sym,SYM)	/* exponential			*/
+{N}\.{N}				TOC(Sym,SYM)	/* floating point		*/
+{N}						TOC(Sym,SYM)	/* integer				*/
+
+										/* operators			*/
+\+						TOC(Sym,ADD)
+\-						TOC(Sym,SUB)
+\*						TOC(Sym,MUL)
+\/						TOC(Sym,DIV)
+\^						TOC(Sym,POW)
+
+\=						TOC(Sym,EQ)
+\.						TOC(Sym,DOT)
+\&						TOC(Sym,AND)
+\~						TOC(Sym,TILD)
+
+[a-zA-Z0-9_]+			TOC(Sym,SYM)
+
+[ \t\r\n]+				{}				/* drop spaces			*/
+
+%%
