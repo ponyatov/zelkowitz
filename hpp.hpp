@@ -29,7 +29,7 @@ extern void yyerror(string);
 
 // virtual machine
 
-#define Msz 0x100
+#define Msz 0x200
 #define Rsz 0x07
 #define Fsz 0x07
 
